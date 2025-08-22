@@ -1,21 +1,14 @@
-# Базовый образ Python
-FROM python:3.11-slim
+# Use Python 3.12 instead of 3.13
+FROM python:3.12-slim
 
-# Рабочая директория
 WORKDIR /app
-
-# Копируем файлы зависимостей
-COPY requirements.txt .
-
-# Обновляем pip и устанавливаем зависимости
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Копируем весь проект
 COPY . .
 
-# Экспонируем порт Dash
+RUN pip install --no-cache-dir -r requirements.txt
+
 EXPOSE 8050
 
-# Команда запуска Dash
+ENV PORT=8050
+ENV HOST=0.0.0.0
+
 CMD ["python", "app.py"]
