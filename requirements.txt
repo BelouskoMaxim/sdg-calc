@@ -1,3 +1,6 @@
+pip>=24.2
+setuptools>=75.1.0
+wheel>=0.44.0
 dash==3.2.0
 dash-mantine-components==2.2.0
 dash-iconify==0.1.2

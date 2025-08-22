@@ -1,18 +1,28 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
-RUN apt-get update && apt-get install -y \
+# Устанавливаем системные зависимости (если нужны pandas/numpy/scipy)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
+    g++ \
+    libffi-dev \
+    libssl-dev \
+    libatlas-base-dev \
+    libblas-dev \
+    liblapack-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-COPY . .
+# Обновляем pip/setuptools/wheel — критично для Python 3.13
+RUN pip install --upgrade pip setuptools wheel
 
-# Обновление pip, setuptools и wheel
-RUN pip install --upgrade pip setuptools==68.0.0 wheel
+# Копируем зависимости
+COPY requirements.txt .
 
-# Установка зависимостей
+# Ставим зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8050
+# Копируем код
+COPY . .
+
+# Запуск
 CMD ["python", "app.py"]
